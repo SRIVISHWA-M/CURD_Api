@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.16.1"
+  },
+  "name": "curd",
+  "version": "1.0.0",
+  "description": "CURD-Operation using express,mongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "CURD-API"
+  },
+  "author": "srivishwa",
+  "license": "ISC"
+}
