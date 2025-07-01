@@ -22,7 +22,7 @@ app.post('/api/products',async (req,res) => {
   // res.send(req.body)
 })
 // Reviwe the all-prod
-app.get('/api/products',async (req,res) => {
+app.get('/api/productsview',async (req,res) => {
   try {
     const product = await Product.find({})
     res.status(200).json(product)
@@ -30,6 +30,7 @@ app.get('/api/products',async (req,res) => {
     res.status(500).json({message:error.message})
   }
 })
+
 // review using id
 app.get('/api/product/:id',async (req,res) => {
   try {
@@ -42,11 +43,12 @@ app.get('/api/product/:id',async (req,res) => {
     res.status(500).json({message:error.message})
   }
 })
+
 // Update prod
 app.put('/api/product/:id',async (req,res) => {
   try {
     const {id} =req.params
-    const product =await Product.findByIdAndUpdate(req.body)
+    const product =await Product.findByIdAndUpdate(id,req.body)
     if (!product) {
       return res.status(404).json({message:"Product not found"})
     }
@@ -56,6 +58,51 @@ app.put('/api/product/:id',async (req,res) => {
     res.status(500).json({message:error.message})
   }
 })
+
+// delete prod
+app.delete('/api/product/:id',async (req,res) => {
+  try {
+    const {id} = req.params
+    const product =await Product.findByIdAndDelete(id)
+  if (!product) {
+    return res.status(404).json({message:"Product not found"})
+  }
+    res.status(200).json(product)
+  } catch (error) {
+    res.status(500).json({message:error.message})
+  }
+})
+
+// Sort prod
+// app.get('/api/products',async (req,res) => {
+//   try {
+//     const product = await Product.find({}).sort({
+//       name:1,
+//       price:1,
+//       quantity:-1
+//     })
+    
+//     console.log("Sorted Products:");
+//     product.forEach(p => console.log(p.name, p.price, p.quantity));
+
+//     res.status(200).json(product)
+//   } catch (error) {
+//     res.status(500).json({message:error.message})
+//   }
+
+// })
+app.get('/api/products',async (req,res) => {
+  try {
+    const sortField = req.query.sortBy || 'name'
+    const sortObj = {}
+    sortObj[sortField] = 1;
+    const product = await Product.find().sort(sortObj)
+    res.status(200).json(product)
+  } catch (error) {
+    res.status(500).json({message:error.message})
+  }
+})
+// DataBase
 mongoose.connect("mongodb://localhost:27017/CURD")
 .then(() => {
   console.log("DB is connected");
