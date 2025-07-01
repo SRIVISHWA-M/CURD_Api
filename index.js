@@ -1,17 +1,18 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const Product = require('./models/productModel')
+const dotenv = require('dotenv').config()
+const port = process.env.PORT || 2222
 const app = express()
 // middleware
 app.use(express.json())
 
-
+// Genderal route 
 app.get('/',(req,res) => {
   res.send('hii hello')
 })
 // Add-prod
 app.post('/api/products',async (req,res) => {
-  // console.log("Received:", req.body);
   try {
     const product = await Product.create(req.body)
     res.status(200).json(product)
@@ -63,7 +64,7 @@ app.put('/api/product/:id',async (req,res) => {
 app.delete('/api/product/:id',async (req,res) => {
   try {
     const {id} = req.params
-    const product =await Product.findByIdAndDelete(id)
+    const product =await Product.findByIdAndDelete(id)  
   if (!product) {
     return res.status(404).json({message:"Product not found"})
   }
@@ -106,7 +107,7 @@ app.get('/api/products',async (req,res) => {
 mongoose.connect("mongodb://localhost:27017/CURD")
 .then(() => {
   console.log("DB is connected");
-  app.listen(2222,() =>{
+  app.listen(port,() =>{
     console.log('server is Running');
   });
 })
